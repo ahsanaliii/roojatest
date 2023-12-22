@@ -16,6 +16,12 @@ import {
   OverviewWithdrawalsDetailsType,
 } from "../../types/types.ts";
 
+import {
+  regularAuthDummyData,
+  adminAuthDummyData,
+  supportAuthDummyData,
+} from "../../../mocks/unit-test-data.ts";
+
 // Test case 1: Test the initial state
 test("initial state is correct", () => {
   const state = userAuthSliceReducer(undefined, { type: "nonexistent" });
@@ -24,16 +30,6 @@ test("initial state is correct", () => {
 
 // Test case 2: Test setUser action
 test("setUser action sets user data and dashboard data", () => {
-  const dummyUserData: { user: UserType; token: string } = {
-    user: {
-      id: "1",
-      first_name: "John",
-      last_name: "Doe",
-      email: "john.doe@example.com",
-    },
-    token: "someToken",
-  };
-
   const dummyDashboardData = {
     accounts: {} as OverviewAccountsDetailsType,
     purchases: {} as OverviewPurchaseDetailsType,
@@ -44,37 +40,19 @@ test("setUser action sets user data and dashboard data", () => {
 
   const newState = userAuthSliceReducer(
     initialState,
-    setUser({ userData: dummyUserData, dashboardData: dummyDashboardData })
+    setUser({
+      userData: regularAuthDummyData,
+      dashboardData: dummyDashboardData,
+    })
   );
 
-  expect(newState.userData).toEqual(dummyUserData);
+  expect(newState.userData).toEqual(regularAuthDummyData);
   expect(newState.dashboardData).toEqual(dummyDashboardData);
 });
 
 // Test case 3: Test logout action
 test("logout action resets state to initial state", () => {
-  const stateWithUserData = {
-    loading: false,
-    appLoading: false,
-    userData: {
-      user: {
-        id: "2",
-        first_name: "Jane",
-        last_name: "Doe",
-        email: "jane.doe@example.com",
-      },
-      token: "anotherToken",
-    },
-    dashboardData: {
-      accounts: {} as OverviewAccountsDetailsType,
-      purchases: {} as OverviewPurchaseDetailsType,
-      fundings: {} as OverviewFundingsDetailsType,
-      withdrawals: {} as OverviewWithdrawalsDetailsType,
-      fees: {} as OverviewFeesDetailsType,
-    },
-  };
-
-  const newState = userAuthSliceReducer(stateWithUserData, logout());
+  const newState = userAuthSliceReducer(adminAuthDummyData, logout());
   expect(newState).toEqual(initialState);
 });
 
@@ -92,18 +70,8 @@ test("getAppLoadingSlice selector returns correct app loading state", () => {
 
 // Test case 6: Test getUserDetailsSlice selector
 test("getUserDetailsSlice selector returns correct user data", () => {
-  const dummyUserData: { user: UserType; token: string } = {
-    user: {
-      id: "3",
-      first_name: "Alice",
-      last_name: "Smith",
-      email: "alice.smith@example.com",
-    },
-    token: "yetAnotherToken",
-  };
-
-  const state = { userAuth: { userData: dummyUserData } };
-  expect(getUserDetailsSlice(state)).toEqual(dummyUserData);
+  const state = { userAuth: { userData: supportAuthDummyData } };
+  expect(getUserDetailsSlice(state)).toEqual(supportAuthDummyData);
 });
 
 // Test case 7: Test getUserDashboardDataSlice selector

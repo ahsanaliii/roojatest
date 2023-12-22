@@ -12,7 +12,7 @@ const getByTextWithMarkup = (
   text: string,
   options?: SelectorMatcherOptions
 ) => {
-  const matches = screen.getAllByText((content, element) => {
+  const matches = screen.getAllByText((content: any, element: any) => {
     const elementText = element.textContent || "";
     return elementText.includes(text);
   }, options);
